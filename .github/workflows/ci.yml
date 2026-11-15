@@ -1,0 +1,65 @@
+name: PrismGate CI & Statistical Verification
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  gateway-verification:
+    name: Ruff, Strict Mypy, Hypothesis Properties & Benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sync dependencies
+        run: uv sync --all-extras
+
+      - name: Ruff lint & formatting check
+        run: |
+          uv run ruff check src tests
+          uv run ruff format --check src tests
+
+      - name: Strict static type checking (mypy --strict)
+        run: uv run mypy src
+
+      - name: Unit, SSE E2E & Hypothesis property tests (95%+ coverage gate)
+        run: uv run pytest --cov=prism_gate --cov-fail-under=95 --cov-report=term-missing
+
+      - name: Verify PSI & Jensen-Shannon drift invariants
+        run: uv run prism drift-check
+
+      - name: Execute 300-request concurrent cascade & Vegas load benchmark
+        run: uv run prism benchmark --requests 300 --concurrency 32
+
+  observability-ui:
+    name: TypeScript 5.6 & React 18 Observability Console Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install dependencies & verify production TypeScript bundle
+        run: |
+          npm ci
+          npm run build
