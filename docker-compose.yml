@@ -1,0 +1,8 @@
+services:
+  prism-gate:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PRISM_UI_DIST_DIR=/app/ui/dist
+    restart: unless-stopped

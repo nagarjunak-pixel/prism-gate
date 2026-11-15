@@ -1,0 +1,32 @@
+# Python environments & bytecode
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+
+# Testing, typing & lint caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Frontend build artifacts & dependencies (note: ui/package-lock.json is tracked)
+ui/node_modules/
+ui/dist/
+*.tsbuildinfo
+
+# OS & editor files
+.DS_Store
+.env
+.env.local
+.idea/
+.vscode/
