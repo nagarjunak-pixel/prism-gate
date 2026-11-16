@@ -1,14 +1,21 @@
 # PrismGate
 
 [![CI & Statistical Verification](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml)
+[![Release v1.0.0](https://img.shields.io/badge/release-v1.0.0-1f6feb.svg)](https://github.com/nagarjunak-pixel/prism-gate/releases/tag/v1.0.0)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![TypeScript 5.6](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Coverage 97.6%](https://img.shields.io/badge/coverage-97.6%25-10B981)](#verification--quality-gates)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](LICENSE)
 
 **PrismGate** is a high-throughput, OpenAI-compatible **Multi-Tenant LLM Inference Gateway, TCP-Vegas Adaptive Concurrency Controller, Speculative Complexity Cascade Router, Online Claim-Faithfulness Judge, and Statistical Drift Plane**.
 
 Designed for production AI infrastructure teams operating heterogeneous fast and frontier model pools (`gemini-2.5-flash`, `vllm-qwen-32b`, `gemini-2.5-pro`, `claude-sonnet-4`), PrismGate eliminates static rate-limit tuning, cuts inference spend by **57%+** via speculative routing and tenant-isolated signed-hash semantic caching, catches quantitative RAG hallucinations inline, and detects live traffic distribution shifts using **Population Stability Index (`PSI`)** and **Base-2 Jensen-Shannon Divergence (`JSD`)**.
+
+---
+
+## Live PrismGate Multi-Tenant Control Plane (TCP-Vegas, FinOps Cascade & Drift Lab)
+
+![PrismGate Control Plane — TCP-Vegas Adaptive Concurrency, Speculative FinOps Cascade & PSI/JSD Statistical Drift](docs/assets/workbench-preview.png)
 
 ---
 

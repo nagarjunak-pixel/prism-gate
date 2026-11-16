@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use or reference prism-gate in research or enterprise architecture, please cite it as below."
+type: software
+title: "PrismGate: Multi-Tenant OpenAI-Compatible LLM Inference Gateway, TCP-Vegas Concurrency Controller & PSI/JSD Statistical Drift Plane"
+version: 1.0.0
+date-released: "2026-11-16"
+license: Apache-2.0
+url: "https://nagarjunak-pixel.github.io/projects.html"
+repository-code: "https://github.com/nagarjunak-pixel/prism-gate"
+authors:
+  - family-names: "Kamireddy"
+    given-names: "Nagarjuna Reddy"
+    orcid: ""
+    affiliation: "Suryagentic AI"
