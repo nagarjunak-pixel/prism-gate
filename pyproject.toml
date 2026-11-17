@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "prism-gate"
 version = "1.0.0"
-description = "High-Throughput Multi-Tenant LLM Inference Gateway with TCP-Vegas Adaptive Concurrency Control, Speculative Cascade Routing, Online Claim-Faithfulness Verification, and PSI/Jensen-Shannon Drift Detection."
+description = "OpenAI-compatible LLM gateway prototype — TCP-Vegas adaptive concurrency, heuristic cascade routing, PSI/JSD drift checks. Reference implementation"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.12"

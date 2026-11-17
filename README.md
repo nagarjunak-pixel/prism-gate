@@ -7,9 +7,9 @@
 [![Coverage 97.6%](https://img.shields.io/badge/coverage-97.6%25-10B981)](#verification--quality-gates)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-10b981.svg)](LICENSE)
 
-**PrismGate** is a high-throughput, OpenAI-compatible **Multi-Tenant LLM Inference Gateway, TCP-Vegas Adaptive Concurrency Controller, Speculative Complexity Cascade Router, Online Claim-Faithfulness Judge, and Statistical Drift Plane**.
+**PrismGate** is an OpenAI-compatible, multi-tenant **LLM gateway prototype** written in Python. It combines an adaptive concurrency limiter based on TCP Vegas / Netflix Gradient2 ideas, per-tenant token-bucket admission with priority shedding, a heuristic complexity-based cascade router with a feature-hashing response cache, a rule-based claim-faithfulness checker, and **Population Stability Index (`PSI`)** / **Base-2 Jensen-Shannon Divergence (`JSD`)** drift detectors.
 
-Designed for production AI infrastructure teams operating heterogeneous fast and frontier model pools (`gemini-2.5-flash`, `vllm-qwen-32b`, `gemini-2.5-pro`, `claude-sonnet-4`), PrismGate eliminates static rate-limit tuning, cuts inference spend by **57%+** via speculative routing and tenant-isolated signed-hash semantic caching, catches quantitative RAG hallucinations inline, and detects live traffic distribution shifts using **Population Stability Index (`PSI`)** and **Base-2 Jensen-Shannon Divergence (`JSD`)**.
+It is a reference implementation for exploring these control-plane techniques, not a production gateway. The bundled benchmark runs against a simulated upstream pool (synthetic latencies and a static price table for `gemini-2.5-flash`, `vllm-qwen-32b`, `gemini-2.5-pro`, `claude-sonnet-4`); in that simulation, cascade routing plus caching reduced modeled spend by **57.16%** versus pinning every request to `claude-sonnet-4`. An HTTP adapter can proxy a real OpenAI-compatible endpoint, but it has not been benchmarked here.
 
 ---
 
@@ -68,6 +68,16 @@ Executed locally on Apple Silicon (Python 3.12.12, `uv run prism benchmark --req
 | **FinOps Net Inference Cost Reduction** | **`57.16%`** | `$0.040807` actual vs `$0.095247` static `claude-sonnet-4` pin |
 | **Tenant-Isolated Semantic Cache Hit Rate** | **`17.5%`** | Zero cross-tenant leakage; numeric/negation guarded |
 | **`CRITICAL` Priority Tier Preservation** | **`97.5%` (`117 / 120`)** | Protected by progressive `BATCH_BACKGROUND` shedding at $\ge 85\%$ util |
+
+---
+
+## Scope & Limitations
+
+- **Scale:** ~4.5k lines of Python in `src/prism_gate` (plus ~1.3k lines of tests) and a ~1.4k-line React/TypeScript demo UI. Single-process, in-memory state (token buckets, limiters, cache); no persistence, distributed coordination, or hardened auth.
+- **Benchmarks are simulated:** the numbers above come from `prism benchmark` against `SimulatedUpstreamPool` (synthesized completions, simulated RTTs with injected congestion, static per-model prices) on 300 requests built from a small set of hand-written prompts, run on one Apple Silicon laptop (CPU only). Throughput and latency reflect gateway overhead plus scaled simulated sleeps, not real model serving; the cost reduction is a modeled figure.
+- **Heuristic components:** the complexity scorer uses lexical/structural features; the "semantic" cache uses signed feature hashing of words and bigrams (lexical similarity, no embedding model); the faithfulness judge is a regex/lexical rule checker (numbers, units, entities, antonyms), not an NLI or LLM judge.
+- **Verification:** JSD/PSI properties (identity, symmetry, boundedness) are checked with `Hypothesis` property-based tests, which is testing rather than formal proof.
+- **Not production-hardened:** the gateway has not been load-tested against real providers or deployed in production; treat it as an educational reference.
 
 ---
 
