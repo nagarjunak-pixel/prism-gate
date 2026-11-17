@@ -1,4 +1,4 @@
-name: PrismGate CI & Statistical Verification
+name: PrismGate CI
 
 on:
   push:

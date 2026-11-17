@@ -1,6 +1,6 @@
 # PrismGate
 
-[![CI & Statistical Verification](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml)
+[![PrismGate CI](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml)
 [![Release v1.0.0](https://img.shields.io/badge/release-v1.0.0-1f6feb.svg)](https://github.com/nagarjunak-pixel/prism-gate/releases/tag/v1.0.0)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![TypeScript 5.6](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -28,14 +28,14 @@ flowchart LR
     Adm --> Cache["Tenant-Isolated Signed-Hash Cache"]
     Cache -- "Miss" --> Cascade["Complexity Classifier [0..1]"]
     Cascade -- "Simple (<0.48)" --> Fast["Fast Vegas Pool (Flash / Qwen-32B)"]
-    Cascade -- "Complex (>=0.48)" --> Front["Frontier Vegas Pool (Pro / Sonnet-4)"]
+    Cascade -- "Complex (>=0.48)" --> Front["Higher-Tier Vegas Pool (Pro / Sonnet-4)"]
     Fast -- "Low Confidence / Faithfulness" --> Front
     Fast --> Eval["Atomic Claim-Faithfulness Judge"]
     Front --> Eval
     Eval --> Drift["PSI + Jensen-Shannon Drift Plane"]
 ```
 
-### Five Production Control-Plane Subsystems
+### Five Control-Plane Subsystems
 
 1. **TCP-Vegas / Netflix Gradient2 Adaptive Concurrency (`src/prism_gate/concur/vegas_limiter.py`)**:
    - Continuously estimates upstream standing queue depth $\hat{Q} = \text{inflight} \times (1 - \text{RTT}_{\min} / \text{RTT}_{\text{sample}})$.
@@ -46,13 +46,13 @@ flowchart LR
 3. **Speculative Complexity Cascade Router & Signed-Hash Semantic Cache (`src/prism_gate/routing/cascade_router.py`)**:
    - Sub-50µs structural complexity scorer evaluating reasoning depth, code/math density, constraint density, and multi-hop markers.
    - **Tenant-Isolated Signed Feature-Hashing Cache** ($D = 256$ Weinberger random projections + numeric & negation parity guards) ensuring zero cross-tenant or cross-RAG-context leakage.
-   - Honest FinOps ledger tracking exact actual spend (including dual fast+frontier charges on cascade escalations) against counterfactual static frontier pinning.
+   - Honest FinOps ledger tracking exact actual spend (including dual fast+higher-tier charges on cascade escalations) against counterfactual static single-model pinning.
 4. **Online Claim-Level Groundedness / Hallucination Judge (`src/prism_gate/evals/faithfulness.py`)**:
    - Decomposes completions into atomic claims and verifies canonicalized currency/dosage/percentage literals (`$12.4M` vs `$18.9M`, `5mg` vs `500mg`), domain entities, and clinical/financial antonym polarity against retrieved RAG context chunks.
    - Prevents hallucinated completions from poisoning the semantic cache.
 5. **Statistical Distribution-Shift Plane (`src/prism_gate/drift/detectors.py`)**:
    - **Population Stability Index (`PSI`)** across decile-binned prompt length, complexity, and latency distributions.
-   - **Base-2 Jensen-Shannon Divergence (`JSD` $\in [0, 1]$ bits)** over token and topic distributions, formally verified via `Hypothesis` for exact identity ($\text{JSD}(P,P)=0$), bit-for-bit symmetry ($\text{JSD}(P,Q)=\text{JSD}(Q,P)$), and unit-interval boundedness.
+   - **Base-2 Jensen-Shannon Divergence (`JSD` $\in [0, 1]$ bits)** over token and topic distributions, property-tested via `Hypothesis` for exact identity ($\text{JSD}(P,P)=0$), bit-for-bit symmetry ($\text{JSD}(P,Q)=\text{JSD}(Q,P)$), and unit-interval boundedness.
 
 ---
 
@@ -63,7 +63,7 @@ Executed locally on Apple Silicon (Python 3.12.12, `uv run prism benchmark --req
 | Metric | Measured Value | Notes |
 | :--- | ---: | :--- |
 | **Gateway Control-Plane Overhead (`p50 / p95 / p99`)** | **`0.067 / 0.126 / 0.137 ms`** | Admission + Complexity + Signed-Hash Cache + Vegas Lease |
-| **End-to-End Inference Latency (`p50 / p95 / p99`)** | **`15.90 / 62.15 / 72.02 ms`** | Mixed Fast, Cache Hit, Escalated, and Frontier traffic |
+| **End-to-End Inference Latency (`p50 / p95 / p99`)** | **`15.90 / 62.15 / 72.02 ms`** | Mixed Fast, Cache Hit, Escalated, and Pro/Sonnet-4 traffic |
 | **Sustained Gateway Throughput** | **`4,666.6 req/s`** | `300` requests @ `32` concurrent async workers |
 | **FinOps Net Inference Cost Reduction** | **`57.16%`** | `$0.040807` actual vs `$0.095247` static `claude-sonnet-4` pin |
 | **Tenant-Isolated Semantic Cache Hit Rate** | **`17.5%`** | Zero cross-tenant leakage; numeric/negation guarded |
@@ -173,9 +173,9 @@ Licensed under the [Apache License, Version 2.0](LICENSE).
 
 ---
 
-## Author & Enterprise AI Architecture Hub
+## Portfolio & Links
 Built by **[Nagarjuna Reddy Kamireddy](https://nagarjunak-pixel.github.io/)** (*Nagarjuna Kamireddy / Nagarjuna K*) — Lead AI Architect, GenAI & Agentic AI Lead, and Corporate AI Trainer (20+ years across Enterprise Data, SAP HANA & Production AI; AWS Certified Solutions Architect – Professional & NVIDIA-Certified Professional: Agentic AI).
 
-- **Official Portfolio & Architecture Hub:** [https://nagarjunak-pixel.github.io/](https://nagarjunak-pixel.github.io/)
-- **Enterprise Case Studies & Technical Articles:** [Case Studies](https://nagarjunak-pixel.github.io/case-studies.html) · [Architecture Articles](https://nagarjunak-pixel.github.io/articles.html) · [10-Mandate Role Fit](https://nagarjunak-pixel.github.io/roles.html)
+- **Portfolio:** [https://nagarjunak-pixel.github.io/](https://nagarjunak-pixel.github.io/)
+- **Case Studies & Technical Articles:** [Case Studies](https://nagarjunak-pixel.github.io/case-studies.html) · [Architecture Articles](https://nagarjunak-pixel.github.io/articles.html) · [10-Mandate Role Fit](https://nagarjunak-pixel.github.io/roles.html)
 - **Master CV & AI Search Index:** [Master CV](https://nagarjunak-pixel.github.io/resume.html) · [`llms-full.txt`](https://nagarjunak-pixel.github.io/llms-full.txt) · [LinkedIn](https://www.linkedin.com/in/nagarjuna-kamireddy)
