@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.12"
 authors = [
-  { name = "Nagarjuna Kamireddy", email = "sendemailtonagarjuna@gmail.com" },
+  { name = "Nagarjuna Kamireddy", email = "writetonagarjuna@gmail.com" },
 ]
 keywords = [
   "llm-gateway",

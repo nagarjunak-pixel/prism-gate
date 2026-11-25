@@ -12,4 +12,4 @@
 - Hallucinated RAG completions (`hallucination_detected == True`) are never persisted to the semantic cache.
 
 ## Reporting a Vulnerability
-Please report security issues privately to **Nagarjuna Kamireddy** (`sendemailtonagarjuna@gmail.com`) rather than opening a public GitHub issue. Reports are acknowledged within 48 hours.
+Please report security issues privately to **Nagarjuna Kamireddy** (`writetonagarjuna@gmail.com`) rather than opening a public GitHub issue. Reports are acknowledged within 48 hours.
