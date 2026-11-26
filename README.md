@@ -161,7 +161,7 @@ cd ui && npm ci && npm run build
 
 PrismGate serves as **Pillar 3 (High-Throughput Inference Control Plane, Faithfulness & Statistical Drift)** in a cohesive 3-system enterprise AI architecture:
 1. **[`aegis-runtime`](https://github.com/nagarjunak-pixel/aegis-runtime)** — Zero-Trust Agentic Control Plane, `.aegis` AST Policy Compiler, & Cryptographic ERP Saga Engine.
-2. **[`aegis-runtime`](https://github.com/nagarjunak-pixel/aegis-runtime)** — Multi-Echelon Supply-Chain Digital Twin, Exact Branch-and-Bound MILP Solver, & `CVaR95` Risk Engine.
+2. **[`company-os`](https://github.com/nagarjunak-pixel/company-os)** — Multi-Agent Enterprise Operating System, Durable Workflow Execution, & Governance Control Plane.
 3. **[`prism-gate`](https://github.com/nagarjunak-pixel/prism-gate)** — OpenAI-Compatible Streaming Gateway, TCP-Vegas Concurrency Controller, Speculative Cascade Router, & `PSI`/`JSD` Drift Plane.
 
 ---
