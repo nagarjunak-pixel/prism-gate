@@ -1,7 +1,7 @@
 # PrismGate
 
 [![PrismGate CI](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/nagarjunak-pixel/prism-gate/actions/workflows/ci.yml)
-[![Release v1.0.0](https://img.shields.io/badge/release-v1.0.0-1f6feb.svg)](https://github.com/nagarjunak-pixel/prism-gate/releases/tag/v1.0.0)
+[![Release v1.1.0](https://img.shields.io/badge/release-v1.1.0-1f6feb.svg)](https://github.com/nagarjunak-pixel/prism-gate/releases/tag/v1.1.0)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![TypeScript 5.6](https://img.shields.io/badge/TypeScript-5.6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Coverage 97.6%](https://img.shields.io/badge/coverage-97.6%25-10B981)](#verification--quality-gates)
@@ -157,6 +157,11 @@ cd ui && npm ci && npm run build
 
 ---
 
+## v1.1.0 — Bounded Zero-Text Decision Router, PipeAxes Prefill Slicer & Switch-Adapted Drift (`src/prism_gate/routing/bounded_decision_router.py`)
+
+- **Bounded Zero-Text Decision Router (`BoundedDecisionRouter`, `POST /api/v1/routing/bounded-decision`):** Routes closed-set `1-of-N` classification and ranking decisions via calibrated softmax margins and normalized Shannon entropy (`0` prose generation), while flagging `bfloat16` near-tie logit margins (`arXiv:2611.34462`) for `float32` tie-break or looped-depth escalation (`arXiv:2611.34923`).
+- **Latency-Slack Prefill Slicer (`compute_pipeaxes_slice_plan`, `arXiv:2611.34615`) & Signed Receipts (`SignedBillingReceipt`, `arXiv:2611.34623`):** Sizes `64K`-context prefill micro-slices with Hadamard-`INT4` activation transport so interactive `<2s` TTFT SLO traffic is not head-of-line blocked, paired with `SwitchAdaptedDriftTracker` (`arXiv:2611.34905`) and `HMAC-SHA256` stream-verified billing receipts.
+
 ## Enterprise AI Reference Suite Integration
 
 PrismGate serves as **Pillar 3 (High-Throughput Inference Control Plane, Faithfulness & Statistical Drift)** in a cohesive 3-system enterprise AI architecture:
@@ -178,4 +183,4 @@ Built by **[Nagarjuna Reddy Kamireddy](https://nagarjunak-pixel.github.io/)** (*
 
 - **Portfolio:** [https://nagarjunak-pixel.github.io/](https://nagarjunak-pixel.github.io/)
 - **Case Studies & Technical Articles:** [Case Studies](https://nagarjunak-pixel.github.io/case-studies.html) · [Architecture Articles](https://nagarjunak-pixel.github.io/articles.html) · [10-Mandate Role Fit](https://nagarjunak-pixel.github.io/roles.html)
-- **Master CV & AI Search Index:** [Master CV](https://nagarjunak-pixel.github.io/resume.html) · [`llms-full.txt`](https://nagarjunak-pixel.github.io/llms-full.txt) · [LinkedIn](https://www.linkedin.com/in/nagarjuna-kamireddy)
+- **Curriculum Vitae & LinkedIn:** [Resume](https://nagarjunak-pixel.github.io/resume.html) · [LinkedIn](https://www.linkedin.com/in/nagarjuna-kamireddy)

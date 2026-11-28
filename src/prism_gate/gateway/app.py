@@ -17,15 +17,21 @@ import os
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
 
 from prism_gate import __version__
 from prism_gate.benchmarks.load_harness import LoadBenchmarkHarness
 from prism_gate.gateway.engine import GatewayRejectedError, PrismGateEngine
 from prism_gate.providers.upstreams import HTTPUpstreamProvider, UpstreamProvider
+from prism_gate.routing.bounded_decision_router import (
+    BoundedDecisionRouter,
+    SignedBillingReceipt,
+    compute_pipeaxes_slice_plan,
+)
 from prism_gate.routing.cascade_router import MODEL_CATALOG
 from prism_gate.types import (
     BenchmarkRequest,
@@ -37,6 +43,13 @@ from prism_gate.types import (
     FaithfulnessRequest,
     GatewayOverview,
 )
+
+
+class BoundedDecisionRequest(BaseModel):
+    options: list[str] = Field(min_length=2)
+    logits: list[float] = Field(min_length=2)
+    prompt_tokens: int = Field(default=4096, ge=1)
+    ttft_slo_ms: float = Field(default=600.0, gt=20.0)
 
 
 def _default_ui_dist() -> Path:
@@ -181,6 +194,36 @@ def create_app(
             concurrency=payload.concurrency,
             inject_congestion_spike=payload.inject_congestion_spike,
         )
+
+    @application.post("/api/v1/routing/bounded-decision")
+    async def api_bounded_decision(payload: BoundedDecisionRequest) -> dict[str, Any]:
+        router = BoundedDecisionRouter()
+        try:
+            verdict = router.evaluate(payload.options, payload.logits)
+            slice_plan = compute_pipeaxes_slice_plan(
+                prompt_tokens=payload.prompt_tokens,
+                ttft_slo_ms=payload.ttft_slo_ms,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        receipt = SignedBillingReceipt.issue(
+            signing_key=b"prism-gate-billing-receipt-hmac-v1",
+            request_id="bounded-dec",
+            model_id=verdict.route,
+            prompt_tokens=payload.prompt_tokens,
+            completion_chunks=(verdict.selected_option,),
+        )
+        return {
+            "route": verdict.route,
+            "selected_option": verdict.selected_option,
+            "top1_top2_margin": verdict.top1_top2_margin,
+            "normalized_entropy": verdict.normalized_entropy,
+            "near_tie_bf16_risk": verdict.near_tie_bf16_risk,
+            "slice_tokens": slice_plan.slice_tokens,
+            "num_slices": slice_plan.num_slices,
+            "estimated_short_req_p95_ttft_ms": slice_plan.estimated_short_req_p95_ttft_ms,
+            "receipt_signature_hex": receipt.signature_hex,
+        }
 
     @application.get("/metrics")
     async def prometheus_metrics() -> PlainTextResponse:

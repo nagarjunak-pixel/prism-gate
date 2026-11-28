@@ -1,6 +1,6 @@
 """PrismGate: Multi-Tenant LLM Inference Gateway & Statistical Control Plane."""
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 from prism_gate.admission.token_bucket import HierarchicalAdmissionController
 from prism_gate.concur.vegas_limiter import VegasAdaptiveLimiter
